@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import com.pluralsight.blog.data.PostRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +21,12 @@ public class DatabaseLoader implements ApplicationRunner {
             "Earbuds", "Speakers", "Tripod", "Instant Pot", "Coffee Cup", "Keyboard", "Sunglasses"};
     public List<Post> randomPosts = new ArrayList<>();
     public List<Author> authors = new ArrayList<>();
+    
+    private final PostRepository postRepository;
 
-    public DatabaseLoader() {
+    @Autowired
+    public DatabaseLoader(PostRepository postRepository) {
+    	this.postRepository = postRepository;
     }
 
     @Override
@@ -34,5 +39,7 @@ public class DatabaseLoader implements ApplicationRunner {
             Post post = new Post(title, "Lorem ipsum dolor sit amet, consectetur adipiscing elit… ");
             randomPosts.add(post);
         });
+        
+        postRepository.saveAll(randomPosts);
     }
 }
